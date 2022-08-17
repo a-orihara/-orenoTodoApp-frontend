@@ -1,24 +1,37 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 function App() {
+  const [ todos, setTodos ] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3002/api/v1/todos')
+      .then(resp => {
+      // console.log(resp.data)
+      setTodos(resp.data);
+      })
+      .catch(e => {
+      console.log(e);
+      })
+  }, [])
+
+  const createButton = (req, res) => {};
+  const deleteButton = (req, res) => {};
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
         <p>momo募集中yokokokoo</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        { todos.map((todo, index) => {
+          return(
+            <div key={index}>
+              <p>{todo.name}</p>
+              <p>{todo.index}</p>
+            </div>
+          )
+        })}
     </div>
   );
 }
