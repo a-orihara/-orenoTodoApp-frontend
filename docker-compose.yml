@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  react-app:
+    build:
+      context: .
+    image: react-app  
+    container_name: react-ctr
+    volumes:
+      # dockerコンテナ本体の、/usr/src/appを作業場に。
+      # ルートディレクトリ直下でCRAすると、直下に./reactAppが自動で生成
+      # ./reactApp/直下に付けた名前でディレクトリが生成。例：./reactApp/oreno-todo-app
+      # なので、./reactApp直下が/usr/src/app直下にコピー。
+      # つまり、/usr/src/app/<reactで作成したapp名>(/usr/src/app/oreno-todo-app)となる
+      - ./reactApp:/usr/src/app
+    command: sh -c "cd todo-app && npm start"
+    # （左:自分のPCポート、右:dookerコンテナのポート）
+    ports:
+      - "3000:3000"
+    # コンテナが勝手に終了しないための設定
+    tty: true
+    # 標準入出力とエラー出力をコンテナに結びつける設定
+    stdin_open: true
+    # ↓使ってない
+    # ホットリロードを行う設定
+    # environment:
+    #   - CHOKIDAR_USEPOLLING=true
