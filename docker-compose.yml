@@ -12,7 +12,7 @@ services:
       # なので、./reactApp直下が/usr/src/app直下にコピー。
       # つまり、/usr/src/app/<reactで作成したapp名>(/usr/src/app/oreno-todo-app)となる
       - ./reactApp:/usr/src/app
-    command: sh -c "cd todo-app && npm start"
+    command: sh -c "cd oreno-todoapp-web && npm start"
     # （左:自分のPCポート、右:dookerコンテナのポート）
     ports:
       - "3000:3000"
