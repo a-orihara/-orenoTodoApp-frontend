@@ -4,30 +4,16 @@ import axios from 'axios'
 import { ChangeDoneButton } from './components/ChangeDoneButton';
 import DonePopup from './components/DonePopup';
 import getAxios from './api/getAxios'
+import deleteAxios from './api/deleteAxios'
 
 function App() {
 
   // todoLists:配列
   const [ todoLists, setTodoList ] = useState([]);
 
-  // const getAxios = () => {
-  //   axios.get('http://localhost:3002/api/v1/todos')
-  //     .then(res => {
-  //     // console.log(resp.data)
-  //     res.data.sort((a, b)=>a.id - b.id)
-  //     // rea.data:オブジェクトの配列
-  //     setTodoList(res.data);
-  //     })
-  //     .catch(e => {
-  //     console.log(e);
-  //     }
-  //   )
-  // }
-  
   // Reactで配列を展開して一覧表示する際は、「元の配列に変更を加えてしまっていないか」という点は、
   // 気にかけながらソースを書いていく必要があるかと思います。
 
-  
   useEffect(() => {
     getAxios()
       .then((data)=>{
@@ -48,8 +34,7 @@ function App() {
   const deleteButton = (todoList) => {
     const sure = window.confirm('Are you sure?');
     if (sure) {
-      console.log(todoLists.id)
-      axios.delete(`http://localhost:3002/api/v1/todos/${todoList.id}`)
+      deleteAxios(todoList)
       .then( () => {
         getAxios()
           .then( (data)=>{
@@ -70,7 +55,7 @@ function App() {
       is_completed: !todoList.is_completed
   }
     axios.patch(`http://localhost:3002/api/v1/todos/${todoList.id}`, updateTodo)
-      .then(res => {
+      .then(() => {
       // 更新したものしか返さない
       // res.data:オブジェクト
       // 配列の8番目はねえよ
@@ -110,7 +95,6 @@ function App() {
                 index={todoList.index}
                 changeDone={()=>changeDone(todoList,index)}
               />
-              {console.log(todoList.is_completed)}
               <DonePopup is_completed={todoList.is_completed}/>
             </div>
           )
