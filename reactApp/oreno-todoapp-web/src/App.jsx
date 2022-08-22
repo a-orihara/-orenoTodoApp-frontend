@@ -6,15 +6,14 @@ import DonePopup from './components/DonePopup';
 import getAxios from './api/getAxios'
 import deleteAxios from './api/deleteAxios'
 import InputArea from './components/InputArea';
-import CreateTodoButton from './components/CreateTodoButton'
-// import styled from 'styled-components';
-
-// const Todo = styled.div`
-//   color: green;
-//   `;
 
 function App() {
-
+  const divStyle = {
+    marginBottom: '10px',
+    paddingTop: '20px',
+    color: 'black',
+    border: '5px solid',
+  }
   // todoLists:配列
   const [ todoLists, setTodoList ] = useState([]);
   const [ inputTodoText, setInputTodoText ] = useState("")
@@ -29,27 +28,11 @@ function App() {
       })
   },[])
 
-  const divStyle = {
-    marginBottom: '10px',
-    paddingTop: '20px',
-    color: 'black',
-    border: '5px solid',
-  }
-
   const onChangeInputTodoText = (e) =>  {
     // event.target.valueに入力した値が入る。入力した値をsetTodoTextの引数に入れてtodoTextを設定。
     setInputTodoText(e.target.value);
   }
-  // const createButton = (req, res) => {
-  //   axios.post('http://localhost:3002/api/v1/todos', fetchedTodos)
-  //     .then( res => {
-  //       setFetchedTodos(res.data)
-  //     })
-  //     .catch(e => {
-  //       console.log(e)
-  //     })
-  // };
-
+ 
   const deleteButton = (todoList) => {
     const sure = window.confirm('削除するよー?');
     if (sure) {
@@ -103,6 +86,7 @@ function App() {
             setTodoList(data)
           }) 
       })
+    setInputTodoText("")
   }
 
 
@@ -119,15 +103,8 @@ function App() {
         {/* // todoLists:配列 */}
         { todoLists.map((todoList, index) => {
           return(
-            // 配列の要素が動的に変更された時に、変更前の配列の要素との対応関係をReact側が認識するため
-            // React上で{}内の配列を一覧表示する際には、keyという属性を付与することが義務付けられています。
-            // このkey「id」は、配列要素のインデクス番号です
-            // mapのindexを使うと不都合が起きる時がある
-            // 配列の一つ一つの要素に対してkeyを持ちなさい
-            // keyによってriactはどのDOMが動的に変化しているかを知る。
             <div key={index} style={divStyle}>
               <p>{todoList.name}</p>
-              <p>{todoList.id}</p>
               <button onClick={()=>deleteButton(todoList)}>消すよ</button>
               <ChangeDoneButton
                 id={todoList.id}
@@ -186,3 +163,9 @@ export default App;
       // returnTodo[6]とかなると、returnTodoの6番目はないよ
       // つまりオブジェクトを取得→その変更を反映→そのオブジェクトを含めた配列を再レンダ
       // returnTodo.is_completed = res.data.is_completed
+      // 配列の要素が動的に変更された時に、変更前の配列の要素との対応関係をReact側が認識するため
+            // React上で{}内の配列を一覧表示する際には、keyという属性を付与することが義務付けられています。
+            // このkey「id」は、配列要素のインデクス番号です
+            // mapのindexを使うと不都合が起きる時がある
+            // 配列の一つ一つの要素に対してkeyを持ちなさい
+            // keyによってriactはどのDOMが動的に変化しているかを知る。
