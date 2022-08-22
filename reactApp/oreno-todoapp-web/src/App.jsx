@@ -5,11 +5,19 @@ import { ChangeDoneButton } from './components/ChangeDoneButton';
 import DonePopup from './components/DonePopup';
 import getAxios from './api/getAxios'
 import deleteAxios from './api/deleteAxios'
+import InputArea from './components/InputArea';
+import CreateTodoButton from './components/CreateTodoButton'
+// import styled from 'styled-components';
+
+// const Todo = styled.div`
+//   color: green;
+//   `;
 
 function App() {
 
   // todoLists:配列
   const [ todoLists, setTodoList ] = useState([]);
+  const [ inputTodoText, setInputTodoText ] = useState("")
 
   // Reactで配列を展開して一覧表示する際は、「元の配列に変更を加えてしまっていないか」という点は、
   // 気にかけながらソースを書いていく必要があるかと思います。
@@ -21,6 +29,17 @@ function App() {
       })
   },[])
 
+  const divStyle = {
+    marginBottom: '10px',
+    paddingTop: '20px',
+    color: 'black',
+    border: '5px solid',
+  }
+
+  const onChangeInputTodoText = (e) =>  {
+    // event.target.valueに入力した値が入る。入力した値をsetTodoTextの引数に入れてtodoTextを設定。
+    setInputTodoText(e.target.value);
+  }
   // const createButton = (req, res) => {
   //   axios.post('http://localhost:3002/api/v1/todos', fetchedTodos)
   //     .then( res => {
@@ -32,7 +51,7 @@ function App() {
   // };
 
   const deleteButton = (todoList) => {
-    const sure = window.confirm('Are you sure?');
+    const sure = window.confirm('削除するよー?');
     if (sure) {
       deleteAxios(todoList)
       .then( () => {
@@ -53,7 +72,7 @@ function App() {
       id: todoList.id,
       name : todoList.name,
       is_completed: !todoList.is_completed
-  }
+    }
     axios.patch(`http://localhost:3002/api/v1/todos/${todoList.id}`, updateTodo)
       .then(() => {
       // 更新したものしか返さない
@@ -74,9 +93,29 @@ function App() {
       })
   }
 
+  const onCliclAdd = () => {
+    if (inputTodoText === "") return;
+    const data = {name: inputTodoText}
+    axios.post("http://localhost:3002/api/v1/todos", data)
+      .then((res)=>{
+        getAxios()
+          .then( (data)=>{
+            setTodoList(data)
+          }) 
+      })
+  }
+
+
+
+
   return (
     <div className="App">
-        <p>momo募集中yokokokoo</p>
+        <h1>カモン!TODO!</h1>
+        <InputArea 
+          inputTodoText={inputTodoText} 
+          onChangeInputTodoText={onChangeInputTodoText}
+        />
+        <button onClick={()=>onCliclAdd()}>生成だっちゃ</button>
         {/* // todoLists:配列 */}
         { todoLists.map((todoList, index) => {
           return(
@@ -86,7 +125,7 @@ function App() {
             // mapのindexを使うと不都合が起きる時がある
             // 配列の一つ一つの要素に対してkeyを持ちなさい
             // keyによってriactはどのDOMが動的に変化しているかを知る。
-            <div key={index}>
+            <div key={index} style={divStyle}>
               <p>{todoList.name}</p>
               <p>{todoList.id}</p>
               <button onClick={()=>deleteButton(todoList)}>消すよ</button>
