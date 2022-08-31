@@ -24,15 +24,29 @@ function App() {
   useEffect(() => {
     getAxios()
       .then((data)=>{
+        
+        // [
+        //   {
+        //     "id": 30,
+        //     "name": "ダンスをする",
+        //     "is_completed": false,
+        //     "created_at": "2022-08-29T02:59:31.866Z",
+        //     "updated_at": "2022-08-29T02:59:31.866Z"
+        //   },
+        // ]
         setTodoList(data)
       })
   },[])
+  
+
+  
+
 
   const onChangeInputTodoText = (e) =>  {
     // event.target.valueに入力した値が入る。入力した値をsetTodoTextの引数に入れてtodoTextを設定。
     setInputTodoText(e.target.value);
   }
- 
+
   const deleteButton = (todoList) => {
     const sure = window.confirm('削除するよー?');
     if (sure) {
@@ -104,7 +118,7 @@ function App() {
         { todoLists.map((todoList, index) => {
           return(
             <div key={index} style={divStyle}>
-              <p>{todoList.name}</p>
+              <h3>{todoList.name}</h3>
               <button onClick={()=>deleteButton(todoList)}>消すよ</button>
               <ChangeDoneButton
                 id={todoList.id}
